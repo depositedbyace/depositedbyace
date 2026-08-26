@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>depositedbyace — buy, sell, trade football gear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1210;
+    --ink-2:#161C18;
+    --paper:#F5F1E6;
+    --turf:#1B3A28;
+    --turf-light:#25502F;
+    --gold:#D4A63A;
+    --gold-bright:#E8C266;
+    --rust:#C1512F;
+    --steel:#8C9088;
+    --line: rgba(245,241,230,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    margin:0;
+  }
+
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  a{color:inherit;}
+
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(14,18,16,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    font-family:'Anton', sans-serif;
+    font-size:20px;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .logo span{color:var(--gold-bright);}
+  .navlinks{display:flex; gap:32px; align-items:center;}
+  .navlinks a{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--steel);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    padding-bottom:4px;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .navlinks a:hover{color:var(--paper); border-color:var(--gold);}
+  .nav-cta{
+    background:var(--gold);
+    color:var(--ink);
+    padding:10px 18px;
+    font-size:13px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    text-decoration:none;
+    border-radius:2px;
+  }
+  @media (max-width:720px){ .navlinks a:not(.nav-cta){display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 80px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(ellipse at 80% -10%, rgba(27,58,40,0.55), transparent 55%);
+  }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold-bright);
+    margin-bottom:22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:""; width:26px; height:1px; background:var(--gold);}
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:56px;
+    align-items:start;
+  }
+  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr;} }
+
+  .hero h1{
+    font-size:clamp(44px, 7vw, 84px);
+    line-height:0.96;
+    color:var(--paper);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--gold-bright);
+  }
+  .hero-sub{
+    margin-top:26px;
+    max-width:480px;
+    font-size:17px;
+    line-height:1.65;
+    color:#CFCBBE;
+  }
+  .hero-tags{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:28px;
+  }
+  .tag-pill{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    border:1px solid var(--line);
+    color:var(--steel);
+    padding:6px 12px;
+    border-radius:20px;
+  }
+
+  /* ---------- DEPOSIT SLIP (signature element) ---------- */
+  .slip{
+    background:var(--paper);
+    color:var(--ink);
+    padding:26px 26px 22px;
+    position:relative;
+    border-radius:2px;
+    transform:rotate(1.4deg);
+    box-shadow:0 22px 40px rgba(0,0,0,0.45);
+    animation:settle .7s ease-out;
+  }
+  @keyframes settle{
+    from{ transform:rotate(6deg) translateY(-14px); opacity:0; }
+    to{ transform:rotate(1.4deg) translateY(0); opacity:1; }
+  }
+  .slip::before{
+    content:"";
+    position:absolute; left:0; right:0; top:-1px;
+    height:0;
+    border-top:2px dashed rgba(14,18,16,0.25);
+  }
+  .slip-notches{
+    position:absolute; top:-9px; left:0; right:0;
+    display:flex; justify-content:space-evenly;
+  }
+  .slip-notches span{
+    width:16px; height:16px; border-radius:50%;
+    background:var(--ink);
+  }
+  .slip-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    border-bottom:1px dashed rgba(14,18,16,0.3);
+    padding-bottom:14px; margin-bottom:16px;
+  }
+  .slip-head .k{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--turf); font-weight:700;
+  }
+  .slip-head .v{
+    font-family:'Anton', sans-serif;
+    font-size:15px; text-transform:uppercase;
+  }
+  .slip-stamp{
+    font-family:'Anton', sans-serif;
+    font-size:13px;
+    border:2px solid var(--rust);
+    color:var(--rust);
+    padding:4px 10px;
+    transform:rotate(-8deg);
+    border-radius:4px;
+    letter-spacing:0.05em;
+  }
+  .slip h3{
+    font-size:19px;
+    line-height:1.2;
+    margin-bottom:6px;
+  }
+  .slip p.small{
+    font-size:13px;
+    color:#4b4b45;
+    margin:0 0 18px;
+    line-height:1.5;
+  }
+  .slip form{display:flex; flex-direction:column; gap:10px;}
+  .slip input[type=email]{
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    padding:12px 14px;
+    border:1.5px solid rgba(14,18,16,0.35);
+    background:#fff;
+    border-radius:2px;
+  }
+  .slip input[type=email]:focus{outline:2px solid var(--turf); outline-offset:1px;}
+  .slip button{
+    font-family:'Work Sans', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    padding:13px 14px;
+    border-radius:2px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .slip button:hover{background:var(--turf);}
+  .slip .barcode{
+    margin-top:16px;
+    height:26px;
+    background:repeating-linear-gradient(90deg, #0E1210 0 2px, transparent 2px 4px, #0E1210 4px 5px, transparent 5px 9px, #0E1210 9px 12px, transparent 12px 14px);
+    opacity:0.85;
+  }
+  .slip .fine{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px; letter-spacing:0.05em;
+    color:#6b6b63; margin-top:8px;
+  }
+  .form-note{
+    font-size:12px; color:var(--steel); margin-top:10px;
+  }
+  .form-note.success{color:var(--gold-bright);}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:88px 0; border-bottom:1px solid var(--line);}
+  .section-head{max-width:600px; margin-bottom:52px;}
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{font-size:clamp(30px,4vw,46px); color:var(--paper);}
+  .section-head p{color:#B9B5A8; font-size:16px; margin-top:14px; line-height:1.6;}
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media (max-width:760px){ .steps{grid-template-columns:1fr;} }
+  .step{
+    background:var(--ink);
+    padding:34px 28px;
+  }
+  .step .num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--gold-bright);
+  }
+  .step h3{
+    font-size:22px;
+    margin:18px 0 12px;
+    color:var(--paper);
+  }
+  .step p{
+    color:#B9B5A8; font-size:15px; line-height:1.6; margin:0;
+  }
+
+  /* ---------- ROSTER / ROADMAP ---------- */
+  .roster{
+    border:1px solid var(--line);
+  }
+  .roster-row{
+    display:grid;
+    grid-template-columns:160px 1fr 140px;
+    align-items:center;
+    padding:22px 26px;
+    border-bottom:1px solid var(--line);
+    gap:18px;
+  }
+  .roster-row:last-child{border-bottom:none;}
+  @media (max-width:640px){
+    .roster-row{grid-template-columns:1fr; gap:8px; text-align:left;}
+  }
+  .roster-status{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+  }
+  .roster-status.active{color:var(--gold-bright);}
+  .roster-status.bench{color:var(--steel);}
+  .roster-sport{
+    font-family:'Anton', sans-serif;
+    font-size:22px;
+    text-transform:uppercase;
+    color:var(--paper);
+  }
+  .roster-sport small{
+    display:block;
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    text-transform:none;
+    letter-spacing:0;
+    color:#9C9990;
+    margin-top:4px;
+  }
+  .roster-tag{
+    justify-self:end;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    padding:5px 10px;
+    border:1px solid var(--turf-light);
+    color:var(--turf-light);
+    border-radius:20px;
+    text-align:center;
+  }
+  .roster-row.active-row .roster-tag{
+    border-color:var(--gold);
+    color:var(--gold-bright);
+  }
+  @media (max-width:640px){ .roster-tag{justify-self:start;} }
+
+  /* ---------- MISSION ---------- */
+  .mission{
+    background:var(--turf);
+    border-bottom:1px solid var(--line);
+  }
+  .mission .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media (max-width:820px){ .mission .wrap{grid-template-columns:1fr;} }
+  .mission h2{
+    font-size:clamp(28px,4vw,42px);
+    color:var(--paper);
+  }
+  .mission-quote{
+    font-size:18px;
+    line-height:1.7;
+    color:#E4E9E1;
+  }
+  .mission-quote p{margin:0 0 18px;}
+  .mission-sign{
+    font-family:'Anton', sans-serif;
+    font-size:14px;
+    letter-spacing:0.1em;
+    color:var(--gold-bright);
+    text-transform:uppercase;
+  }
+
+  /* ---------- FOOTER CTA ---------- */
+  .cta-final{
+    padding:96px 0;
+    text-align:center;
+  }
+  .cta-final h2{
+    font-size:clamp(34px,6vw,64px);
+    color:var(--paper);
+  }
+  .cta-final p{
+    color:#B9B5A8; margin:18px auto 34px; max-width:480px; font-size:16px;
+  }
+  .cta-form{
+    display:flex; gap:0; max-width:440px; margin:0 auto;
+    border:1.5px solid var(--paper);
+  }
+  .cta-form input{
+    flex:1; background:transparent; border:none;
+    padding:16px 16px; color:var(--paper); font-size:14px;
+    font-family:'Work Sans', sans-serif;
+  }
+  .cta-form input::placeholder{color:#8A8780;}
+  .cta-form input:focus{outline:none; background:rgba(245,241,230,0.06);}
+  .cta-form button{
+    background:var(--gold);
+    color:var(--ink);
+    border:none;
+    padding:0 22px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .cta-form button:hover{background:var(--gold-bright);}
+
+  footer{padding:32px 0; }
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:12px; color:var(--steel);
+  }
+  @media (max-width:600px){ footer .wrap{flex-direction:column; gap:10px; text-align:center;} }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">deposited<span>by</span>ace</div>
+    <div class="navlinks">
+      <a href="#how">How it works</a>
+      <a href="#roster">The roster</a>
+      <a href="#mission">Mission</a>
+      <a href="#signup" class="nav-cta">Get early access</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Pre-season &middot; football gear marketplace</div>
+      <h1>Buy it.<br>Sell it.<br>Suit <em>up.</em></h1>
+      <p class="hero-sub">
+        depositedbyace is the marketplace built for football players — buy new or used gear,
+        sell what I've outgrown, or trade straight across with another athlete.
+        Every deal is a chance to gear up for less and put money back in my pocket.
+      </p>
+      <div class="hero-tags">
+        <span class="tag-pill">Buy new</span>
+        <span class="tag-pill">Buy used</span>
+        <span class="tag-pill">Sell new</span>
+        <span class="tag-pill">Sell used</span>
+        <span class="tag-pill">Trade</span>
+      </div>
+    </div>
+
+    <div class="slip" id="signup">
+      <div class="slip-notches">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="slip-head">
+        <div>
+          <div class="k">Deposit slip</div>
+          <div class="v">Early access</div>
+        </div>
+        <div class="slip-stamp">Reserved</div>
+      </div>
+      <h3>Secure my spot before kickoff</h3>
+      <p class="small">Drop my email and I'll get the word the moment listings go live — first athletes in get first pick of gear.</p>
+      <form id="slip-form">
+        <input type="email" id="slip-email" placeholder="email@example.com" required>
+        <button type="submit">Secure my spot</button>
+      </form>
+      <div class="barcode"></div>
+      <div class="fine">NO. 000-ACE &middot; VALID AT LAUNCH &middot; NON-TRANSFERABLE</div>
+      <div class="form-note" id="slip-note"></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How it works</div>
+      <h2>Three plays. That's it.</h2>
+      <p>No middleman markups, no guessing what my gear is worth. List it, move it, get paid.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num mono">01</div>
+        <h3>List my gear</h3>
+        <p>Snap a few photos of the pads, cleats, gloves, or helmet I've outgrown and post it in minutes.</p>
+      </div>
+      <div class="step">
+        <div class="num mono">02</div>
+        <h3>Call my play</h3>
+        <p>Buy new or used, sell to another athlete, or trade straight across for gear I actually need.</p>
+      </div>
+      <div class="step">
+        <div class="num mono">03</div>
+        <h3>Get paid, gear up</h3>
+        <p>Cash lands in my pocket and new gear lands on my doorstep — ready for the next game.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roster">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The roster</div>
+      <h2>Football's starting. More sports are on the bench.</h2>
+      <p>I'm launching with football gear first. Once the roster fills out, I'm calling up soccer, basketball, and track & field.</p>
+    </div>
+    <div class="roster">
+      <div class="roster-row active-row">
+        <div class="roster-status active">Starting</div>
+        <div class="roster-sport">Football<small>Live at launch — pads, helmets, cleats, gloves &amp; more</small></div>
+        <div class="roster-tag">Active now</div>
+      </div>
+      <div class="roster-row">
+        <div class="roster-status bench">On the bench</div>
+        <div class="roster-sport">Soccer<small>Boots, shin guards, and keeper gear</small></div>
+        <div class="roster-tag">Up next</div>
+      </div>
+      <div class="roster-row">
+        <div class="roster-status bench">On the bench</div>
+        <div class="roster-sport">Basketball<small>Shoes, jerseys, and training gear</small></div>
+        <div class="roster-tag">Coming up</div>
+      </div>
+      <div class="roster-row">
+        <div class="roster-status bench">On the bench</div>
+        <div class="roster-sport">Track &amp; field<small>Spikes, blocks, and throwing gear</small></div>
+        <div class="roster-tag">Coming up</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mission" id="mission">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow" style="color:var(--gold-bright)">Why I built this</div>
+      <h2>Gear up. Look good. Get paid.</h2>
+    </div>
+    <div class="mission-quote">
+      <p>Football gave me everything before I ever stopped playing it — and business is how I'm giving something back. depositedbyace exists so young athletes have a real way to earn from the sport they love, while never having to choose between looking good on the field and affording the gear to get there.</p>
+      <p>Every pair of cleats resold, every helmet traded, every deal made here is an athlete investing in themselves — and in the next one coming up behind them.</p>
+      <div class="mission-sign">— Founder, Jason Lartey</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" style="border-bottom:none;">
+  <div class="wrap">
+    <h2>Be first on<br>the field.</h2>
+    <p>Join the early access list — no spam, just a heads up the day depositedbyace opens for business.</p>
+    <form class="cta-form" id="cta-form">
+      <input type="email" id="cta-email" placeholder="email@example.com" required>
+      <button type="submit">Notify me</button>
+    </form>
+    <div class="form-note" id="cta-note" style="margin-top:14px;"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>depositedbyace &mdash; buy, sell, trade football gear.</div>
+    <div>&copy; 2026 depositedbyace. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  function handleSignup(formId, emailId, noteId){
+    const form = document.getElementById(formId);
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById(emailId).value.trim();
+      const note = document.getElementById(noteId);
+      const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if(!isValid){
+        note.textContent = "Enter a valid email to reserve my spot.";
+        note.classList.remove('success');
+        return;
+      }
+      note.textContent = "I'm on the list — I'll get an email at launch.";
+      note.classList.add('success');
+      form.reset();
+    });
+  }
+  handleSignup('slip-form','slip-email','slip-note');
+  handleSignup('cta-form','cta-email','cta-note');
+</script>
+
+</body>
+</html>
