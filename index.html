@@ -681,7 +681,7 @@
       <span id="cart-subtotal">$0</span>
     </div>
     <button class="cart-checkout" id="cart-checkout">Checkout</button>
-    <p class="cart-note">Secure checkout — payments coming online soon.</p>
+    <p class="cart-note">Secure checkout powered by Stripe.</p>
   </div>
 </aside>
 
@@ -953,9 +953,31 @@
   document.getElementById('cart-close').addEventListener('click', closeCart);
   cartOverlay.addEventListener('click', closeCart);
 
-  document.getElementById('cart-checkout').addEventListener('click', function(){
+  document.getElementById('cart-checkout').addEventListener('click', async function(){
     if(cart.length === 0) return;
-    alert("Checkout is almost ready — payment processing is being connected. Your cart is saved, come back soon to complete this purchase!");
+    const checkoutBtn = this;
+    const originalText = checkoutBtn.textContent;
+    checkoutBtn.textContent = 'Redirecting to secure checkout…';
+    checkoutBtn.disabled = true;
+
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cart })
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || 'Something went wrong starting checkout.');
+      }
+
+      window.location.href = data.url; // send the buyer to Stripe's secure payment page
+    } catch (err) {
+      checkoutBtn.textContent = originalText;
+      checkoutBtn.disabled = false;
+      alert(err.message || 'Checkout is temporarily unavailable — please try again in a moment.');
+    }
   });
 
   renderCart();
