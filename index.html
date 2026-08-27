@@ -9,24 +9,44 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#0E1210;
-    --ink-2:#161C18;
-    --paper:#F5F1E6;
-    --turf:#1B3A28;
-    --turf-light:#25502F;
+    --paper:#FAF6EC;
+    --paper-2:#F1EAD7;
+    --ink:#171F1B;
+    --ink-2:#FFFFFF;
+    --ink-soft:#565F58;
+    --green:#2E8F52;
+    --green-dark:#1F6B3C;
     --gold:#D4A63A;
-    --gold-bright:#E8C266;
-    --rust:#C1512F;
-    --steel:#8C9088;
-    --line: rgba(245,241,230,0.14);
+    --gold-bright:#B9822A;
+    --steel:#7A8079;
+    --line: rgba(23,31,27,0.13);
+    --header-bg: rgba(250,246,236,0.9);
+    --photo-placeholder:#E7E0CC;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#12100A;
+      --paper-2:#1B1812;
+      --ink:#F5F1E6;
+      --ink-2:#0E0D09;
+      --ink-soft:#C7C2B4;
+      --green-dark:#4CBE7A;
+      --gold-bright:#E8C266;
+      --steel:#9B9688;
+      --line: rgba(245,241,230,0.14);
+      --header-bg: rgba(18,16,10,0.88);
+      --photo-placeholder:#2A2620;
+    }
   }
 
   *{box-sizing:border-box;}
+  body{ transition: background-color .25s ease, color .25s ease; }
   html{scroll-behavior:smooth;}
   body{
     margin:0;
-    background:var(--ink);
-    color:var(--paper);
+    background:var(--paper);
+    color:var(--ink);
     font-family:'Work Sans', sans-serif;
     -webkit-font-smoothing:antialiased;
   }
@@ -52,7 +72,7 @@
   /* ---------- NAV ---------- */
   header{
     position:sticky; top:0; z-index:50;
-    background:rgba(14,18,16,0.88);
+    background:var(--header-bg);
     backdrop-filter:blur(6px);
     border-bottom:1px solid var(--line);
   }
@@ -65,6 +85,7 @@
     font-size:20px;
     letter-spacing:0.02em;
     text-transform:uppercase;
+    color:var(--ink);
   }
   .logo span{color:var(--gold-bright);}
   .navlinks{display:flex; gap:32px; align-items:center;}
@@ -72,13 +93,13 @@
     font-size:13px;
     text-transform:uppercase;
     letter-spacing:0.08em;
-    color:var(--steel);
+    color:var(--ink-soft);
     text-decoration:none;
     border-bottom:1px solid transparent;
     padding-bottom:4px;
     transition:color .15s ease, border-color .15s ease;
   }
-  .navlinks a:hover{color:var(--paper); border-color:var(--gold);}
+  .navlinks a:hover{color:var(--ink); border-color:var(--gold);}
   .nav-cta{
     background:var(--gold);
     color:var(--ink);
@@ -90,7 +111,7 @@
     text-decoration:none;
     border-radius:2px;
   }
-  @media (max-width:720px){ .navlinks a:not(.nav-cta){display:none;} }
+  @media (max-width:720px){ .navlinks a:not(.nav-cta):not(.cart-btn){display:none;} }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -99,13 +120,15 @@
     overflow:hidden;
     border-bottom:1px solid var(--line);
     background:
-      radial-gradient(ellipse at 80% -10%, rgba(27,58,40,0.55), transparent 55%);
+      radial-gradient(ellipse at 85% -10%, rgba(46,143,82,0.14), transparent 55%),
+      radial-gradient(ellipse at -5% 30%, rgba(46,134,201,0.12), transparent 50%);
   }
   .eyebrow{
     font-size:12px;
     letter-spacing:0.18em;
     text-transform:uppercase;
-    color:var(--gold-bright);
+    color:var(--green-dark);
+    font-weight:600;
     margin-bottom:22px;
     display:flex; align-items:center; gap:10px;
   }
@@ -121,18 +144,18 @@
   .hero h1{
     font-size:clamp(44px, 7vw, 84px);
     line-height:0.96;
-    color:var(--paper);
+    color:var(--ink);
   }
   .hero h1 em{
     font-style:normal;
-    color:var(--gold-bright);
+    color:var(--green-dark);
   }
   .hero-sub{
     margin-top:26px;
     max-width:480px;
     font-size:17px;
     line-height:1.65;
-    color:#CFCBBE;
+    color:var(--ink-soft);
   }
   .hero-tags{
     display:flex; flex-wrap:wrap; gap:10px;
@@ -141,32 +164,29 @@
   .tag-pill{
     font-family:'JetBrains Mono', monospace;
     font-size:12px;
-    border:1px solid var(--line);
-    color:var(--steel);
+    border:1.5px solid var(--green);
+    color:var(--green-dark);
     padding:6px 12px;
     border-radius:20px;
+    background:rgba(46,143,82,0.07);
   }
+  .tag-pill:nth-child(5){ border-color:var(--gold); color:var(--gold-bright); background:rgba(212,166,58,0.1); }
 
   /* ---------- DEPOSIT SLIP (signature element) ---------- */
   .slip{
-    background:var(--paper);
-    color:var(--ink);
+    background:#FAF6EC;
+    color:#171F1B;
     padding:26px 26px 22px;
     position:relative;
     border-radius:2px;
     transform:rotate(1.4deg);
-    box-shadow:0 22px 40px rgba(0,0,0,0.45);
+    box-shadow:0 22px 40px rgba(0,0,0,0.35);
     animation:settle .7s ease-out;
+    border:1px solid rgba(23,31,27,0.13);
   }
   @keyframes settle{
     from{ transform:rotate(6deg) translateY(-14px); opacity:0; }
     to{ transform:rotate(1.4deg) translateY(0); opacity:1; }
-  }
-  .slip::before{
-    content:"";
-    position:absolute; left:0; right:0; top:-1px;
-    height:0;
-    border-top:2px dashed rgba(14,18,16,0.25);
   }
   .slip-notches{
     position:absolute; top:-9px; left:0; right:0;
@@ -174,17 +194,18 @@
   }
   .slip-notches span{
     width:16px; height:16px; border-radius:50%;
-    background:var(--ink);
+    background:#FAF6EC;
+    border:1px solid rgba(23,31,27,0.13);
   }
   .slip-head{
     display:flex; justify-content:space-between; align-items:flex-start;
-    border-bottom:1px dashed rgba(14,18,16,0.3);
+    border-bottom:1px dashed rgba(23,31,27,0.25);
     padding-bottom:14px; margin-bottom:16px;
   }
   .slip-head .k{
     font-family:'JetBrains Mono', monospace;
     font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-    color:var(--turf); font-weight:700;
+    color:var(--green-dark); font-weight:700;
   }
   .slip-head .v{
     font-family:'Anton', sans-serif;
@@ -193,8 +214,8 @@
   .slip-stamp{
     font-family:'Anton', sans-serif;
     font-size:13px;
-    border:2px solid var(--rust);
-    color:var(--rust);
+    border:2px solid var(--gold);
+    color:var(--gold-bright);
     padding:4px 10px;
     transform:rotate(-8deg);
     border-radius:4px;
@@ -207,7 +228,7 @@
   }
   .slip p.small{
     font-size:13px;
-    color:#4b4b45;
+    color:#565F58;
     margin:0 0 18px;
     line-height:1.5;
   }
@@ -216,48 +237,49 @@
     font-family:'Work Sans', sans-serif;
     font-size:14px;
     padding:12px 14px;
-    border:1.5px solid rgba(14,18,16,0.35);
+    border:1.5px solid rgba(23,31,27,0.25);
     background:#fff;
+    color:#171F1B;
     border-radius:2px;
   }
-  .slip input[type=email]:focus{outline:2px solid var(--turf); outline-offset:1px;}
+  .slip input[type=email]:focus{outline:2px solid var(--green); outline-offset:1px;}
   .slip button{
     font-family:'Work Sans', sans-serif;
     font-weight:700;
     font-size:14px;
     text-transform:uppercase;
     letter-spacing:0.05em;
-    background:var(--ink);
-    color:var(--paper);
+    background:var(--green);
+    color:#fff;
     border:none;
     padding:13px 14px;
     border-radius:2px;
     cursor:pointer;
     transition:background .15s ease;
   }
-  .slip button:hover{background:var(--turf);}
+  .slip button:hover{background:var(--green-dark);}
   .slip .barcode{
     margin-top:16px;
     height:26px;
-    background:repeating-linear-gradient(90deg, #0E1210 0 2px, transparent 2px 4px, #0E1210 4px 5px, transparent 5px 9px, #0E1210 9px 12px, transparent 12px 14px);
-    opacity:0.85;
+    background:repeating-linear-gradient(90deg, #171F1B 0 2px, transparent 2px 4px, #171F1B 4px 5px, transparent 5px 9px, #171F1B 9px 12px, transparent 12px 14px);
+    opacity:0.75;
   }
   .slip .fine{
     font-family:'JetBrains Mono', monospace;
     font-size:10.5px; letter-spacing:0.05em;
-    color:#6b6b63; margin-top:8px;
+    color:#7A8079; margin-top:8px;
   }
   .form-note{
     font-size:12px; color:var(--steel); margin-top:10px;
   }
-  .form-note.success{color:var(--gold-bright);}
+  .form-note.success{color:var(--green-dark); font-weight:600;}
 
   /* ---------- SECTION SHELL ---------- */
   section{padding:88px 0; border-bottom:1px solid var(--line);}
   .section-head{max-width:600px; margin-bottom:52px;}
   .section-head .eyebrow{margin-bottom:14px;}
-  .section-head h2{font-size:clamp(30px,4vw,46px); color:var(--paper);}
-  .section-head p{color:#B9B5A8; font-size:16px; margin-top:14px; line-height:1.6;}
+  .section-head h2{font-size:clamp(30px,4vw,46px); color:var(--ink);}
+  .section-head p{color:var(--ink-soft); font-size:16px; margin-top:14px; line-height:1.6;}
 
   /* ---------- HOW IT WORKS ---------- */
   .steps{
@@ -269,26 +291,29 @@
   }
   @media (max-width:760px){ .steps{grid-template-columns:1fr;} }
   .step{
-    background:var(--ink);
+    background:var(--paper-2);
     padding:34px 28px;
   }
   .step .num{
     font-family:'JetBrains Mono', monospace;
     font-size:13px;
-    color:var(--gold-bright);
+    color:var(--green-dark);
   }
+  .step:nth-child(2) .num{ color:var(--green); }
+  .step:nth-child(3) .num{ color:var(--gold-bright); }
   .step h3{
     font-size:22px;
     margin:18px 0 12px;
-    color:var(--paper);
+    color:var(--ink);
   }
   .step p{
-    color:#B9B5A8; font-size:15px; line-height:1.6; margin:0;
+    color:var(--ink-soft); font-size:15px; line-height:1.6; margin:0;
   }
 
   /* ---------- ROSTER / ROADMAP ---------- */
   .roster{
     border:1px solid var(--line);
+    background:var(--paper-2);
   }
   .roster-row{
     display:grid;
@@ -314,7 +339,7 @@
     font-family:'Anton', sans-serif;
     font-size:22px;
     text-transform:uppercase;
-    color:var(--paper);
+    color:var(--ink);
   }
   .roster-sport small{
     display:block;
@@ -322,7 +347,7 @@
     font-size:13px;
     text-transform:none;
     letter-spacing:0;
-    color:#9C9990;
+    color:var(--ink-soft);
     margin-top:4px;
   }
   .roster-tag{
@@ -330,8 +355,8 @@
     font-family:'JetBrains Mono', monospace;
     font-size:11px;
     padding:5px 10px;
-    border:1px solid var(--turf-light);
-    color:var(--turf-light);
+    border:1px solid var(--green);
+    color:var(--green-dark);
     border-radius:20px;
     text-align:center;
   }
@@ -343,7 +368,7 @@
 
   /* ---------- MISSION ---------- */
   .mission{
-    background:var(--turf);
+    background:var(--green);
     border-bottom:1px solid var(--line);
   }
   .mission .wrap{
@@ -355,19 +380,19 @@
   @media (max-width:820px){ .mission .wrap{grid-template-columns:1fr;} }
   .mission h2{
     font-size:clamp(28px,4vw,42px);
-    color:var(--paper);
+    color:#fff;
   }
   .mission-quote{
     font-size:18px;
     line-height:1.7;
-    color:#E4E9E1;
+    color:#EAF4EC;
   }
   .mission-quote p{margin:0 0 18px;}
   .mission-sign{
     font-family:'Anton', sans-serif;
     font-size:14px;
     letter-spacing:0.1em;
-    color:var(--gold-bright);
+    color:#fff;
     text-transform:uppercase;
   }
 
@@ -375,28 +400,29 @@
   .cta-final{
     padding:96px 0;
     text-align:center;
+    background:var(--green-dark);
   }
   .cta-final h2{
     font-size:clamp(34px,6vw,64px);
-    color:var(--paper);
+    color:#fff;
   }
   .cta-final p{
-    color:#B9B5A8; margin:18px auto 34px; max-width:480px; font-size:16px;
+    color:#DCEEE1; margin:18px auto 34px; max-width:480px; font-size:16px;
   }
   .cta-form{
     display:flex; gap:0; max-width:440px; margin:0 auto;
-    border:1.5px solid var(--paper);
+    border:1.5px solid #fff;
   }
   .cta-form input{
     flex:1; background:transparent; border:none;
-    padding:16px 16px; color:var(--paper); font-size:14px;
+    padding:16px 16px; color:#fff; font-size:14px;
     font-family:'Work Sans', sans-serif;
   }
-  .cta-form input::placeholder{color:#8A8780;}
-  .cta-form input:focus{outline:none; background:rgba(245,241,230,0.06);}
+  .cta-form input::placeholder{color:#BFE0CB;}
+  .cta-form input:focus{outline:none; background:rgba(255,255,255,0.1);}
   .cta-form button{
-    background:var(--gold);
-    color:var(--ink);
+    background:var(--ink);
+    color:#fff;
     border:none;
     padding:0 22px;
     font-weight:700;
@@ -405,14 +431,222 @@
     font-size:13px;
     cursor:pointer;
   }
-  .cta-form button:hover{background:var(--gold-bright);}
+  .cta-form button:hover{background:#000;}
 
-  footer{padding:32px 0; }
+  footer{padding:32px 0; background:var(--paper);}
   footer .wrap{
     display:flex; justify-content:space-between; align-items:center;
     font-size:12px; color:var(--steel);
   }
   @media (max-width:600px){ footer .wrap{flex-direction:column; gap:10px; text-align:center;} }
+
+  /* ---------- CART BUTTON / NAV ---------- */
+  .cart-btn{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    padding:9px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+    transition:border-color .15s ease;
+  }
+  .cart-btn:hover{border-color:var(--gold);}
+  .cart-count{
+    background:var(--gold);
+    color:#fff;
+    font-weight:700;
+    border-radius:50%;
+    width:18px; height:18px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:11px;
+  }
+
+  /* ---------- CART DRAWER ---------- */
+  .cart-overlay{
+    position:fixed; inset:0;
+    background:rgba(23,31,27,0.45);
+    opacity:0; pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:90;
+  }
+  .cart-overlay.open{opacity:1; pointer-events:auto;}
+  .cart-drawer{
+    position:fixed; top:0; right:0; bottom:0;
+    width:380px; max-width:88vw;
+    background:var(--paper);
+    border-left:1px solid var(--line);
+    z-index:91;
+    display:flex; flex-direction:column;
+    transform:translateX(100%);
+    transition:transform .25s ease;
+  }
+  .cart-drawer.open{transform:translateX(0);}
+  .cart-drawer-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 24px;
+    border-bottom:1px solid var(--line);
+  }
+  .cart-drawer-head h3{
+    font-family:'Anton', sans-serif; text-transform:uppercase; font-size:20px; color:var(--ink);
+  }
+  .cart-close{
+    background:none; border:none; color:var(--steel);
+    font-size:26px; line-height:1; cursor:pointer;
+  }
+  .cart-close:hover{color:var(--ink);}
+  .cart-items{
+    flex:1; overflow-y:auto; padding:18px 24px;
+  }
+  .cart-empty{color:var(--steel); font-size:14px;}
+  .cart-line{
+    display:flex; gap:14px; align-items:center;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .cart-line img{
+    width:56px; height:56px; object-fit:cover; border-radius:4px;
+    flex-shrink:0;
+  }
+  .cart-line-info{flex:1; min-width:0;}
+  .cart-line-info .name{
+    font-size:14px; color:var(--ink); font-weight:600;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .cart-line-info .price{
+    font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--gold-bright); margin-top:4px;
+  }
+  .cart-line-remove{
+    background:none; border:none; color:var(--steel);
+    font-size:12px; text-decoration:underline; cursor:pointer;
+    padding:0; margin-top:6px;
+  }
+  .cart-line-remove:hover{color:var(--ink);}
+  .cart-footer{
+    padding:20px 24px 26px;
+    border-top:1px solid var(--line);
+  }
+  .cart-subtotal{
+    display:flex; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    color:var(--ink); font-size:15px; margin-bottom:16px;
+  }
+  .cart-checkout{
+    width:100%;
+    background:var(--green);
+    color:#fff;
+    border:none;
+    padding:14px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    font-size:14px;
+    border-radius:2px;
+    cursor:pointer;
+  }
+  .cart-checkout:hover{background:var(--green-dark);}
+  .cart-note{
+    text-align:center; font-size:11px; color:var(--steel); margin-top:10px;
+  }
+
+  /* ---------- SHOP GRID (Depop-style) ---------- */
+  .shop-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
+    gap:24px;
+  }
+  .product-card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .product-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--gold);
+  }
+  .product-photo{
+    position:relative;
+    aspect-ratio:1/1;
+    background:var(--photo-placeholder);
+    overflow:hidden;
+  }
+  .product-photo img{
+    width:100%; height:100%; object-fit:cover;
+    display:block;
+  }
+  .product-condition{
+    position:absolute; top:12px; left:12px;
+    background:rgba(23,31,27,0.85);
+    color:#fff;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    padding:5px 10px;
+    border-radius:20px;
+    border:1px solid var(--gold);
+  }
+  .product-photo--soon{
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    color:var(--steel);
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    line-height:1.6;
+    border:1px dashed var(--line);
+    background:var(--paper);
+  }
+  .product-info{padding:16px;}
+  .product-top{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+  }
+  .product-top h3{
+    font-family:'Work Sans', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    text-transform:none;
+    color:var(--ink);
+    letter-spacing:0;
+  }
+  .product-price{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--gold-bright);
+    font-size:15px;
+    white-space:nowrap;
+  }
+  .product-meta{
+    font-size:12.5px; color:var(--ink-soft); margin:8px 0 14px;
+  }
+  .add-to-cart{
+    display:block; width:100%; text-align:center;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    padding:10px;
+    font-weight:700;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    border-radius:2px;
+    cursor:pointer;
+    text-decoration:none;
+    transition:background .15s ease;
+  }
+  .add-to-cart:hover{background:var(--green-dark);}
+  .add-to-cart--ghost{
+    background:transparent;
+    color:var(--steel);
+    border:1px solid var(--line);
+  }
+  .add-to-cart--ghost:hover{border-color:var(--gold); color:var(--gold-bright);}
 </style>
 </head>
 <body>
@@ -421,23 +655,45 @@
   <nav class="wrap">
     <div class="logo">deposited<span>by</span>ace</div>
     <div class="navlinks">
+      <a href="#shop">Shop</a>
       <a href="#how">How it works</a>
       <a href="#roster">The roster</a>
       <a href="#mission">Mission</a>
-      <a href="#signup" class="nav-cta">Get early access</a>
+      <button class="cart-btn" id="cart-open" aria-label="Open cart">
+        Cart <span class="cart-count" id="cart-count">0</span>
+      </button>
     </div>
   </nav>
 </header>
 
+<div class="cart-overlay" id="cart-overlay"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-head">
+    <h3>Your cart</h3>
+    <button class="cart-close" id="cart-close" aria-label="Close cart">&times;</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <p class="cart-empty" id="cart-empty">Your cart's empty — go find some gear.</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cart-subtotal">$0</span>
+    </div>
+    <button class="cart-checkout" id="cart-checkout">Checkout</button>
+    <p class="cart-note">Secure checkout — payments coming online soon.</p>
+  </div>
+</aside>
+
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <div class="eyebrow">Pre-season &middot; football gear marketplace</div>
+      <div class="eyebrow">Now open &middot; football gear marketplace</div>
       <h1>Buy it.<br>Sell it.<br>Suit <em>up.</em></h1>
       <p class="hero-sub">
         depositedbyace is the marketplace built for football players — buy new or used gear,
-        sell what I've outgrown, or trade straight across with another athlete.
-        Every deal is a chance to gear up for less and put money back in my pocket.
+        sell what you've outgrown, or trade straight across with another athlete.
+        Every deal is a chance to gear up for less and put money back in your pocket.
       </p>
       <div class="hero-tags">
         <span class="tag-pill">Buy new</span>
@@ -459,8 +715,8 @@
         </div>
         <div class="slip-stamp">Reserved</div>
       </div>
-      <h3>Secure my spot before kickoff</h3>
-      <p class="small">Drop my email and I'll get the word the moment listings go live — first athletes in get first pick of gear.</p>
+      <h3>Secure your spot before kickoff</h3>
+      <p class="small">Drop your email and we'll send word the moment listings go live — you'll get first pick of the gear.</p>
       <form id="slip-form">
         <input type="email" id="slip-email" placeholder="email@example.com" required>
         <button type="submit">Secure my spot</button>
@@ -472,28 +728,67 @@
   </div>
 </section>
 
+<section id="shop">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The shop</div>
+      <h2>Gear, straight from athletes.</h2>
+      <p>Every listing is real football gear from a real player's closet — buy it before it's gone.</p>
+    </div>
+    <div class="shop-grid">
+      <div class="product-card">
+        <div class="product-photo">
+          <img src="assets/schutt-f7.jpg" alt="Schutt F7 football helmet">
+          <span class="product-condition">Used</span>
+        </div>
+        <div class="product-info">
+          <div class="product-top">
+            <h3>Schutt F7 Helmet</h3>
+            <span class="product-price">$350</span>
+          </div>
+          <p class="product-meta">Size L &middot; Used, game-ready condition</p>
+          <button class="add-to-cart" data-id="schutt-f7" data-name="Schutt F7 Helmet" data-price="350" data-img="assets/schutt-f7.jpg">Add to cart</button>
+        </div>
+      </div>
+      <div class="product-card product-card--soon">
+        <div class="product-photo product-photo--soon">
+          <span>More gear<br>dropping soon</span>
+        </div>
+        <div class="product-info">
+          <div class="product-top">
+            <h3>Your gear here</h3>
+            <span class="product-price">—</span>
+          </div>
+          <p class="product-meta">List your own pads, cleats, or gloves next</p>
+          <a href="#signup" class="add-to-cart add-to-cart--ghost">Notify me</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="how">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">How it works</div>
       <h2>Three plays. That's it.</h2>
-      <p>No middleman markups, no guessing what my gear is worth. List it, move it, get paid.</p>
+      <p>No middleman markups, no guessing what your gear is worth. List it, move it, get paid.</p>
     </div>
     <div class="steps">
       <div class="step">
         <div class="num mono">01</div>
-        <h3>List my gear</h3>
-        <p>Snap a few photos of the pads, cleats, gloves, or helmet I've outgrown and post it in minutes.</p>
+        <h3>List your gear</h3>
+        <p>Snap a few photos of the pads, cleats, gloves, or helmet you've outgrown and post it in minutes.</p>
       </div>
       <div class="step">
         <div class="num mono">02</div>
-        <h3>Call my play</h3>
-        <p>Buy new or used, sell to another athlete, or trade straight across for gear I actually need.</p>
+        <h3>Call your play</h3>
+        <p>Buy new or used, sell to another athlete, or trade straight across for gear you actually need.</p>
       </div>
       <div class="step">
         <div class="num mono">03</div>
         <h3>Get paid, gear up</h3>
-        <p>Cash lands in my pocket and new gear lands on my doorstep — ready for the next game.</p>
+        <p>Cash lands in your pocket and new gear lands on your doorstep — ready for the next game.</p>
       </div>
     </div>
   </div>
@@ -548,7 +843,7 @@
 <section class="cta-final" style="border-bottom:none;">
   <div class="wrap">
     <h2>Be first on<br>the field.</h2>
-    <p>Join the early access list — no spam, just a heads up the day depositedbyace opens for business.</p>
+    <p>Join the early access list — no spam, just a heads-up the day depositedbyace opens for business.</p>
     <form class="cta-form" id="cta-form">
       <input type="email" id="cta-email" placeholder="email@example.com" required>
       <button type="submit">Notify me</button>
@@ -573,17 +868,97 @@
       const note = document.getElementById(noteId);
       const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       if(!isValid){
-        note.textContent = "Enter a valid email to reserve my spot.";
+        note.textContent = "Enter a valid email to reserve your spot.";
         note.classList.remove('success');
         return;
       }
-      note.textContent = "I'm on the list — I'll get an email at launch.";
+      note.textContent = "You're on the list — we'll email you at launch.";
       note.classList.add('success');
       form.reset();
     });
   }
   handleSignup('slip-form','slip-email','slip-note');
   handleSignup('cta-form','cta-email','cta-note');
+
+  // ---------- CART LOGIC ----------
+  let cart = JSON.parse(localStorage.getItem('depositedbyace_cart') || '[]');
+
+  const cartOverlay = document.getElementById('cart-overlay');
+  const cartDrawer = document.getElementById('cart-drawer');
+  const cartCount = document.getElementById('cart-count');
+  const cartItemsEl = document.getElementById('cart-items');
+  const cartEmptyEl = document.getElementById('cart-empty');
+  const cartSubtotalEl = document.getElementById('cart-subtotal');
+
+  function saveCart(){
+    localStorage.setItem('depositedbyace_cart', JSON.stringify(cart));
+    renderCart();
+  }
+
+  function renderCart(){
+    cartCount.textContent = cart.length;
+    cartItemsEl.innerHTML = '';
+    if(cart.length === 0){
+      cartItemsEl.appendChild(cartEmptyEl);
+      cartSubtotalEl.textContent = '$0';
+      return;
+    }
+    let subtotal = 0;
+    cart.forEach(function(item, index){
+      subtotal += item.price;
+      const line = document.createElement('div');
+      line.className = 'cart-line';
+      line.innerHTML =
+        '<img src="' + item.img + '" alt="' + item.name + '">' +
+        '<div class="cart-line-info">' +
+          '<div class="name">' + item.name + '</div>' +
+          '<div class="price">$' + item.price + '</div>' +
+          '<button class="cart-line-remove" data-index="' + index + '">Remove</button>' +
+        '</div>';
+      cartItemsEl.appendChild(line);
+    });
+    cartSubtotalEl.textContent = '$' + subtotal;
+
+    document.querySelectorAll('.cart-line-remove').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        cart.splice(parseInt(btn.dataset.index), 1);
+        saveCart();
+      });
+    });
+  }
+
+  document.querySelectorAll('.add-to-cart[data-id]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      cart.push({
+        id: btn.dataset.id,
+        name: btn.dataset.name,
+        price: parseFloat(btn.dataset.price),
+        img: btn.dataset.img
+      });
+      saveCart();
+      openCart();
+    });
+  });
+
+  function openCart(){
+    cartOverlay.classList.add('open');
+    cartDrawer.classList.add('open');
+  }
+  function closeCart(){
+    cartOverlay.classList.remove('open');
+    cartDrawer.classList.remove('open');
+  }
+
+  document.getElementById('cart-open').addEventListener('click', openCart);
+  document.getElementById('cart-close').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+
+  document.getElementById('cart-checkout').addEventListener('click', function(){
+    if(cart.length === 0) return;
+    alert("Checkout is almost ready — payment processing is being connected. Your cart is saved, come back soon to complete this purchase!");
+  });
+
+  renderCart();
 </script>
 
 </body>
