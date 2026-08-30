@@ -77,9 +77,10 @@
     border-bottom:1px solid var(--line);
   }
   nav.wrap{
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; justify-content:flex-start; gap:20px;
     height:72px;
   }
+  .navlinks{margin-left:auto;}
   .logo{
     font-family:'Anton', sans-serif;
     font-size:20px;
@@ -440,6 +441,156 @@
   }
   @media (max-width:600px){ footer .wrap{flex-direction:column; gap:10px; text-align:center;} }
 
+  /* ---------- BROWSE BUTTON / NAV ---------- */
+  .browse-btn{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    padding:9px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+    transition:border-color .15s ease;
+  }
+  .browse-btn:hover{border-color:var(--green);}
+  .browse-icon{font-size:14px; line-height:1;}
+
+  /* ---------- BROWSE DRAWER (left side) ---------- */
+  .browse-overlay{
+    position:fixed; inset:0;
+    background:rgba(23,31,27,0.45);
+    opacity:0; pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:90;
+  }
+  .browse-overlay.open{opacity:1; pointer-events:auto;}
+  .browse-drawer{
+    position:fixed; top:0; left:0; bottom:0;
+    width:340px; max-width:88vw;
+    background:var(--paper);
+    border-right:1px solid var(--line);
+    z-index:91;
+    display:flex; flex-direction:column;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+  }
+  .browse-drawer.open{transform:translateX(0);}
+  .browse-drawer-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 24px;
+    border-bottom:1px solid var(--line);
+  }
+  .browse-drawer-head h3{
+    font-family:'Anton', sans-serif; text-transform:uppercase; font-size:20px; color:var(--ink);
+  }
+  .browse-close{
+    background:none; border:none; color:var(--steel);
+    font-size:26px; line-height:1; cursor:pointer;
+  }
+  .browse-close:hover{color:var(--ink);}
+  .browse-list{
+    flex:1; overflow-y:auto; padding:16px 24px 24px;
+  }
+  .browse-reset{
+    display:block; width:100%; text-align:left;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:13px;
+    padding:12px 14px;
+    border-radius:4px;
+    cursor:pointer;
+    margin-bottom:18px;
+    transition:border-color .15s ease;
+  }
+  .browse-reset:hover{border-color:var(--gold);}
+
+  .sport-group{
+    border-bottom:1px solid var(--line);
+  }
+  .sport-toggle{
+    width:100%;
+    display:flex; align-items:center; justify-content:space-between;
+    background:none; border:none;
+    padding:16px 2px;
+    font-family:'Anton', sans-serif;
+    text-transform:uppercase;
+    font-size:16px;
+    color:var(--ink);
+    cursor:pointer;
+    text-align:left;
+  }
+  .sport-toggle .chevron{
+    font-size:20px;
+    color:var(--green-dark);
+    transition:transform .2s ease;
+  }
+  .sport-group.open .sport-toggle .chevron{
+    transform:rotate(90deg);
+  }
+  .sport-sublist{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .2s ease;
+  }
+  .sport-sublist > *{overflow:hidden;}
+  .sport-group.open .sport-sublist{
+    grid-template-rows:1fr;
+  }
+  .sub-link{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    padding:9px 2px 9px 14px;
+    cursor:pointer;
+    border-left:2px solid var(--line);
+    margin-left:2px;
+  }
+  .sub-link:hover{
+    color:var(--ink);
+    border-left-color:var(--gold);
+  }
+
+  /* ---------- FILTER STATUS ---------- */
+  .filter-status{
+    display:flex; align-items:center; gap:14px;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    padding:12px 18px;
+    border-radius:4px;
+    margin-bottom:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .filter-status button{
+    background:none;
+    border:none;
+    color:var(--green-dark);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    cursor:pointer;
+    text-decoration:underline;
+    margin-left:auto;
+  }
+  .shop-empty{
+    grid-column:1/-1;
+    color:var(--ink-soft);
+    font-size:14px;
+    padding:24px 0;
+  }
+
   /* ---------- CART BUTTON / NAV ---------- */
   .cart-btn{
     background:transparent;
@@ -654,6 +805,9 @@
 <header>
   <nav class="wrap">
     <div class="logo">deposited<span>by</span>ace</div>
+    <button class="browse-btn" id="browse-open" aria-label="Browse sports and categories">
+      <span class="browse-icon">&#9776;</span> Browse
+    </button>
     <div class="navlinks">
       <a href="#shop">Shop</a>
       <a href="#how">How it works</a>
@@ -665,6 +819,62 @@
     </div>
   </nav>
 </header>
+
+<div class="browse-overlay" id="browse-overlay"></div>
+<aside class="browse-drawer" id="browse-drawer">
+  <div class="browse-drawer-head">
+    <h3>Browse gear</h3>
+    <button class="browse-close" id="browse-close" aria-label="Close browse menu">&times;</button>
+  </div>
+  <div class="browse-list">
+    <button class="browse-reset" id="browse-reset">Show all gear</button>
+
+    <div class="sport-group" data-sport-group="football">
+      <button class="sport-toggle" type="button">Football <span class="chevron">&rsaquo;</span></button>
+      <div class="sport-sublist">
+        <button class="sub-link" data-sport="football" data-category="new">Buy/Sell New</button>
+        <button class="sub-link" data-sport="football" data-category="old">Buy/Sell Old</button>
+        <button class="sub-link" data-sport="football" data-category="trade">Trade</button>
+      </div>
+    </div>
+
+    <div class="sport-group" data-sport-group="soccer">
+      <button class="sport-toggle" type="button">Soccer <span class="chevron">&rsaquo;</span></button>
+      <div class="sport-sublist">
+        <button class="sub-link" data-sport="soccer" data-category="new">Buy/Sell New</button>
+        <button class="sub-link" data-sport="soccer" data-category="old">Buy/Sell Old</button>
+        <button class="sub-link" data-sport="soccer" data-category="trade">Trade</button>
+      </div>
+    </div>
+
+    <div class="sport-group" data-sport-group="basketball">
+      <button class="sport-toggle" type="button">Basketball <span class="chevron">&rsaquo;</span></button>
+      <div class="sport-sublist">
+        <button class="sub-link" data-sport="basketball" data-category="new">Buy/Sell New</button>
+        <button class="sub-link" data-sport="basketball" data-category="old">Buy/Sell Old</button>
+        <button class="sub-link" data-sport="basketball" data-category="trade">Trade</button>
+      </div>
+    </div>
+
+    <div class="sport-group" data-sport-group="track-field">
+      <button class="sport-toggle" type="button">Track &amp; Field <span class="chevron">&rsaquo;</span></button>
+      <div class="sport-sublist">
+        <button class="sub-link" data-sport="track-field" data-category="new">Buy/Sell New</button>
+        <button class="sub-link" data-sport="track-field" data-category="old">Buy/Sell Old</button>
+        <button class="sub-link" data-sport="track-field" data-category="trade">Trade</button>
+      </div>
+    </div>
+
+    <div class="sport-group" data-sport-group="baseball">
+      <button class="sport-toggle" type="button">Baseball <span class="chevron">&rsaquo;</span></button>
+      <div class="sport-sublist">
+        <button class="sub-link" data-sport="baseball" data-category="new">Buy/Sell New</button>
+        <button class="sub-link" data-sport="baseball" data-category="old">Buy/Sell Old</button>
+        <button class="sub-link" data-sport="baseball" data-category="trade">Trade</button>
+      </div>
+    </div>
+  </div>
+</aside>
 
 <div class="cart-overlay" id="cart-overlay"></div>
 <aside class="cart-drawer" id="cart-drawer">
@@ -735,8 +945,12 @@
       <h2>Gear, straight from athletes.</h2>
       <p>Every listing is real football gear from a real player's closet — buy it before it's gone.</p>
     </div>
-    <div class="shop-grid">
-      <div class="product-card">
+    <div class="filter-status" id="filter-status" style="display:none;">
+      <span id="filter-status-text"></span>
+      <button id="filter-clear" type="button">Clear filter &times;</button>
+    </div>
+    <div class="shop-grid" id="shop-grid">
+      <div class="product-card" data-sport="football" data-category="old">
         <div class="product-photo">
           <img src="assets/schutt-f7.jpg" alt="Schutt F7 football helmet">
           <span class="product-condition">Used</span>
@@ -750,7 +964,7 @@
           <button class="add-to-cart" data-id="schutt-f7" data-name="Schutt F7 Helmet" data-price="350" data-img="assets/schutt-f7.jpg">Add to cart</button>
         </div>
       </div>
-      <div class="product-card product-card--soon">
+      <div class="product-card product-card--soon" data-sport="all" data-category="all">
         <div class="product-photo product-photo--soon">
           <span>More gear<br>dropping soon</span>
         </div>
@@ -763,6 +977,7 @@
           <a href="#signup" class="add-to-cart add-to-cart--ghost">Notify me</a>
         </div>
       </div>
+      <p class="shop-empty" id="shop-empty" style="display:none;">No listings in this category yet — check back soon, or be the first to list your gear.</p>
     </div>
   </div>
 </section>
@@ -981,6 +1196,95 @@
   });
 
   renderCart();
+
+  // ---------- BROWSE DRAWER (sports & categories) ----------
+  const browseOverlay = document.getElementById('browse-overlay');
+  const browseDrawer = document.getElementById('browse-drawer');
+
+  function openBrowse(){
+    browseOverlay.classList.add('open');
+    browseDrawer.classList.add('open');
+  }
+  function closeBrowse(){
+    browseOverlay.classList.remove('open');
+    browseDrawer.classList.remove('open');
+  }
+  document.getElementById('browse-open').addEventListener('click', openBrowse);
+  document.getElementById('browse-close').addEventListener('click', closeBrowse);
+  browseOverlay.addEventListener('click', closeBrowse);
+
+  // Accordion: expand/collapse each sport section
+  document.querySelectorAll('.sport-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const group = btn.closest('.sport-group');
+      const wasOpen = group.classList.contains('open');
+      document.querySelectorAll('.sport-group').forEach(function(g){ g.classList.remove('open'); });
+      if(!wasOpen){ group.classList.add('open'); }
+    });
+  });
+
+  // ---------- FILTERING ----------
+  const sportLabels = {
+    football: 'Football',
+    soccer: 'Soccer',
+    basketball: 'Basketball',
+    'track-field': 'Track & Field',
+    baseball: 'Baseball'
+  };
+  const categoryLabels = {
+    'new': 'Buy/Sell New',
+    'old': 'Buy/Sell Old',
+    'trade': 'Trade'
+  };
+
+  const shopGrid = document.getElementById('shop-grid');
+  const shopEmpty = document.getElementById('shop-empty');
+  const filterStatus = document.getElementById('filter-status');
+  const filterStatusText = document.getElementById('filter-status-text');
+
+  function applyFilter(sport, category){
+    const cards = shopGrid.querySelectorAll('.product-card');
+    let visibleCount = 0;
+
+    cards.forEach(function(card){
+      const cardSport = card.dataset.sport;
+      const cardCategory = card.dataset.category;
+      const alwaysShow = cardSport === 'all';
+      const matches = alwaysShow || (cardSport === sport && cardCategory === category);
+      card.style.display = matches ? '' : 'none';
+      if(matches && !alwaysShow) visibleCount++;
+    });
+
+    shopEmpty.style.display = visibleCount === 0 ? 'block' : 'none';
+
+    filterStatus.style.display = 'flex';
+    filterStatusText.textContent = 'Showing: ' + sportLabels[sport] + ' — ' + categoryLabels[category];
+
+    closeBrowse();
+    document.getElementById('shop').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function clearFilter(){
+    shopGrid.querySelectorAll('.product-card').forEach(function(card){
+      card.style.display = '';
+    });
+    shopEmpty.style.display = 'none';
+    filterStatus.style.display = 'none';
+  }
+
+  document.querySelectorAll('.sub-link').forEach(function(link){
+    link.addEventListener('click', function(){
+      applyFilter(link.dataset.sport, link.dataset.category);
+    });
+  });
+
+  document.getElementById('browse-reset').addEventListener('click', function(){
+    clearFilter();
+    closeBrowse();
+    document.getElementById('shop').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.getElementById('filter-clear').addEventListener('click', clearFilter);
 </script>
 
 </body>
