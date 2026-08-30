@@ -537,9 +537,10 @@
   .sport-sublist{
     display:grid;
     grid-template-rows:0fr;
+    overflow:hidden;
     transition:grid-template-rows .2s ease;
   }
-  .sport-sublist > *{overflow:hidden;}
+  .sport-sublist > *{overflow:hidden; min-height:0;}
   .sport-group.open .sport-sublist{
     grid-template-rows:1fr;
   }
